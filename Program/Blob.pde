@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Blob
 {
   float centerX, centerY, displaySize;
@@ -62,29 +64,38 @@ class Blob
     ellipse(centerX, centerY, displaySize, displaySize);
     popMatrix();
   }
-}
-
-class Chromosome
-{
-  Gene red, green, blue;
-  Chromosome(Gene r, Gene g, Gene b)
+  
+  Gamete[] produceGametes()
   {
-    red = r;
-    green = g;
-    blue = b;
+    Gamete[] gametes = new Gamete[4];
+    Chromosome[] c1Copies = chromo1.Meiosis();
+    Chromosome[] c2Copies = chromo2.Meiosis();
+    
+    gametes[0] = new Gamete(c1Copies[0]);
+    gametes[1] = new Gamete(c1Copies[1]);
+    gametes[2] = new Gamete(c2Copies[0]);
+    gametes[3] = new Gamete(c2Copies[1]);
+    
+    return gametes;
   }
 }
 
-class Gene
+class BlobComparatorASC implements Comparator
 {
-  float value;
-  Gene(float val)
+  int compare(Object o1, Object o2)
   {
-    value = val;
+    Float r1 = ((Blob) o1).fitnessValue;
+    Float r2 = ((Blob) o2).fitnessValue;
+    return r1.compareTo(r2);
   }
 }
 
-class Gamete
+class BlobComparatorDESC implements Comparator
 {
-  Chromosome chromosome;
+  int compare(Object o1, Object o2)
+  {
+    Float r1 = ((Blob) o1).fitnessValue;
+    Float r2 = ((Blob) o2).fitnessValue;
+    return -1 * r1.compareTo(r2);
+  }
 }
